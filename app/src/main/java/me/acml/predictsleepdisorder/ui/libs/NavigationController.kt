@@ -16,6 +16,7 @@ object Destination {
     const val DATASETS = "datasets"
     const val ABOUT = "about"
     const val FEATURES = "features"
+    const val MODELING = "modeling"
 }
 
 @Composable
