@@ -1,11 +1,15 @@
 package me.acml.predictsleepdisorder.ui
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import me.acml.predictsleepdisorder.ml.SleepDisorderFeatures
 import me.acml.predictsleepdisorder.ml.SleepDisorderModel
+import me.acml.predictsleepdisorder.ui.libs.readCsvFromAssets
 
 class AppViewModelFactory(
     private val sleepDisorderModel: SleepDisorderModel
@@ -22,6 +26,9 @@ class AppViewModelFactory(
 class AppViewModel(private val sleepDisorderModel: SleepDisorderModel): ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState(SleepDisorderFeatures()))
     val uiState = _uiState.asStateFlow()
+
+    private val _datasets = MutableStateFlow<List<List<String>>>(emptyList())
+    val datasets = _datasets.asStateFlow()
 
     fun makePrediction() {
         val prediction = sleepDisorderModel.predict(
@@ -148,6 +155,13 @@ class AppViewModel(private val sleepDisorderModel: SleepDisorderModel): ViewMode
             _uiState.value = _uiState.value.copy(
                 step = _uiState.value.step - 1
             )
+        }
+    }
+
+    fun loadCsvData(context: Context) {
+        viewModelScope.launch {
+            val data = readCsvFromAssets(context, "datasets.csv")
+            _datasets.value = data
         }
     }
 }

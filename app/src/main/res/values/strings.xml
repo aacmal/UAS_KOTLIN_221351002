@@ -14,4 +14,12 @@
     <string name="enter_your_age">Pick your age and gender</string>
     <string name="next_step">Next</string>
     <string name="year">Year</string>
+    <string name="about">About</string>
+    <string name="story">Story</string>
+    <string name="story_content">Aplikasi ini dibuat untuk membantu pengguna memantau dan memahami kualitas tidur mereka secara lebih cerdas dan personal. Dengan menggunakan data kesehatan dan gaya hidup, seperti durasi tidur, aktivitas fisik, hingga tingkat stres, aplikasi ini memberikan analisis dan prediksi potensi gangguan tidur. Semua proses pembelajaran mesin terjadi langsung di perangkat, sehingga pengguna mendapatkan hasil secara cepat dan aman tanpa perlu khawatir soal privasi.\n\nSelain itu, model pembelajaran mesin di dalam aplikasi dikembangkan menggunakan TensorFlow Lite agar bisa berjalan ringan dan efisien di perangkat Android. Setiap perhitungan dioptimalkan agar hemat daya dan memori, sehingga Anda bisa menggunakan aplikasi ini kapan saja dan di mana saja, bahkan tanpa koneksi internet. Informasi yang dihasilkan diharapkan dapat membantu Anda mengenali faktor-faktor penyebab kualitas tidur yang buruk dan merencanakan perbaikan untuk tidur yang lebih sehat.\n\nPada akhirnya, tujuan utama dari aplikasi ini adalah membuat data dan teknologi lebih bermanfaat dalam mendukung gaya hidup sehat. Dengan memanfaatkan teknologi terkini dan penyajian informasi yang sederhana, kami berharap Anda semakin sadar akan pentingnya kualitas tidur dan terdorong untuk membuat perubahan positif dalam keseharian Anda.</string>
+    <string name="made_with">Created by Aca Maulana</string>
+    <string name="datasets">Datasets</string>
+    <string name="datasets_description">Dataset ini terdiri dari 13 Kolom dan 374 Baris yang ditampilkan dalam tabel di bawah. Kumpulan data yang dipertimbangkan mencakup banyak informasi penting terkait individu dan kesehatan mereka, seperti Person ID, Gender, Age, Occupation, Sleep Duration, Quality of Sleep, Physical Activity Level, Stress Level, BMI Category, Blood Pressure, Heart Rate, Daily Steps, dan Sleep Disorder.\n\nData ini sangat berharga untuk membuat analisis dan pengambilan keputusan yang bertujuan meningkatkan kualitas hidup, pemantauan kesehatan, dan pola tidur. Dengan memahami faktor-faktor ini secara lebih mendetail, kita bisa merancang solusi untuk memperbaiki gaya hidup dan kesehatan secara keseluruhan.</string>
+    <string name="preview">Preview</string>
+    <string name="view_all">View all</string>
 </resources>

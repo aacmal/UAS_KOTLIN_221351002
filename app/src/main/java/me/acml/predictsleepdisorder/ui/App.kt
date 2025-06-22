@@ -1,42 +1,138 @@
 package me.acml.predictsleepdisorder.ui
 
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import me.acml.predictsleepdisorder.R
-import me.acml.predictsleepdisorder.ui.screens.StepOne
-import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
-import me.acml.predictsleepdisorder.ui.theme.textField
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import me.acml.predictsleepdisorder.ui.libs.Destination
+import me.acml.predictsleepdisorder.ui.libs.nonSpatialExpressiveSpring
+import me.acml.predictsleepdisorder.ui.libs.rememberPredictSleepDisorderController
+import me.acml.predictsleepdisorder.ui.libs.spatialExpressiveSpring
+import me.acml.predictsleepdisorder.ui.screens.about.AboutScreen
+import me.acml.predictsleepdisorder.ui.screens.datasets.DatasetsScreen
+import me.acml.predictsleepdisorder.ui.screens.home.HomeScreen
+import me.acml.predictsleepdisorder.ui.screens.predict.PredictScreen
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PredictSleepDisorderApp(viewModel: AppViewModel){
-    val uiState by viewModel.uiState.collectAsState()
-    val features = uiState.features
-    val step = uiState.step
+fun PredictSleepDisorderApp(viewModel: AppViewModel) {
+    val navController = rememberPredictSleepDisorderController()
+    val context = LocalContext.current
 
-    when(step) {
-        1 -> StepOne(age = features.age.toInt(), onAgeChange = {
-            Log.d("PredictSleepDisorderApp", "Age changed: $it")
-            viewModel.updateAge(it.toFloat())
-        })
+    LaunchedEffect(Unit) {
+        viewModel.loadCsvData(context)
+    }
+
+    SharedTransitionLayout {
+        CompositionLocalProvider(
+            LocalSharedTransitionScope provides this@SharedTransitionLayout,
+        ) {
+            NavHost(
+                navController = navController.navController,
+                startDestination = Destination.HOME,
+            ) {
+                composableWithCompositionLocal(
+                    route = Destination.HOME,
+                    enterTransition = null, exitTransition = null
+                ) { backStackEntry ->
+                    HomeScreen(
+                        navigateTo = { navController.navigateTo(backStackEntry, it) })
+                }
+                composableWithCompositionLocal(
+                    route = Destination.PREDICT
+                ) { backStackEntry ->
+                    PredictScreen(
+                        viewModel = viewModel,
+                    )
+                }
+                composableWithCompositionLocal(
+                    route = Destination.ABOUT,
+                    enterTransition = {
+                        slideIn(
+                            initialOffset = { fullSize ->
+                                IntOffset(
+                                    x = fullSize.width,
+                                    y = 0
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    },
+                    exitTransition = {
+                        slideOut(
+                            targetOffset = { fullSize ->
+                                IntOffset(
+                                    x = fullSize.width,
+                                    y = 0
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    }
+                ) { backStackEntry ->
+                    AboutScreen(
+                        back = {
+                            navController.upPress()
+                        }
+                    )
+                }
+                composableWithCompositionLocal(
+                    route = Destination.DATASETS,
+                    enterTransition = {
+                        slideIn(
+                            initialOffset = { fullSize ->
+                                IntOffset(
+                                    x = 0,
+                                    y = fullSize.height
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    },
+                    exitTransition = {
+                        slideOut(
+                            targetOffset = { fullSize ->
+                                IntOffset(
+                                    x = 0,
+                                    y = fullSize.height
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    }
+                ) { backStackEntry ->
+                    DatasetsScreen(
+                        datasets = viewModel.datasets.collectAsState().value,
+                        back = {
+                            navController.upPress()
+                        }
+                    )
+                }
+            }
+        }
+
     }
 }
 
@@ -197,3 +293,39 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel){
 //private fun PredictSleepDisorderAppPreview() {
 //    PredictSleepDisorderApp(viewModel = AppViewModel())
 //}
+
+fun NavGraphBuilder.composableWithCompositionLocal(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    enterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = {
+        fadeIn(nonSpatialExpressiveSpring())
+    },
+    exitTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
+        fadeOut(nonSpatialExpressiveSpring())
+    },
+    popEnterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = enterTransition,
+    popExitTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = exitTransition,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        arguments,
+        deepLinks,
+        enterTransition,
+        exitTransition,
+        popEnterTransition,
+        popExitTransition
+    ) {
+        CompositionLocalProvider(
+            LocalNavAnimatedVisibilityScope provides this@composable
+        ) {
+            content(it)
+        }
+    }
+}
+
+val LocalNavAnimatedVisibilityScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }
