@@ -1,6 +1,7 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateDp
@@ -59,14 +60,19 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
             EnterExitState.PostExit -> 50.dp
         }
     }
-
-    BackHandler {
+    fun onBack() {
         if (step > 1) {
             viewModel.previousStep()
         } else {
             back()
+            viewModel.reset()
         }
     }
+
+    BackHandler {
+        onBack()
+    }
+
 
     with(sharedTransitionScope) {
         Scaffold(
@@ -77,7 +83,7 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                     ),
                     title = {},
                     navigationIcon = {
-                        IconButton(onClick = { back() }) {
+                        IconButton(onClick = { onBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Localized description",
@@ -110,16 +116,21 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                when (step) {
-                    1 -> StepOne(
-                        age = features.age.toInt(), onAgeChange = {
-                            viewModel.updateAge(it.toFloat())
-                        },
-                        gender = features.gender.toString(),
-                        onGenderChange = {
-                            viewModel.updateGender(it)
-                        }
-                    )
+                AnimatedContent(
+                    targetState = step,
+                    label = "PredictStepContent",
+                ) { targetState ->
+                    when (targetState) {
+                        1 -> StepOne(
+                            age = features.age.toInt(), onAgeChange = {
+                                viewModel.updateAge(it.toFloat())
+                            },
+                            gender = features.gender.toString(),
+                            onGenderChange = {
+                                viewModel.updateGender(it)
+                            }
+                        )
+                    }
                 }
             }
 

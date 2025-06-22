@@ -37,6 +37,7 @@ fun StepOne(
     onAgeChange: (Int) -> Unit,
     gender: String,
     onGenderChange: (String) -> Unit = {},
+    onNext: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -70,7 +71,9 @@ fun StepOne(
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(
-            onClick = {},
+            onClick = {
+                onNext()
+            },
             modifier = Modifier.align(Alignment.End),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,

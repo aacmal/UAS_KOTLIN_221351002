@@ -164,6 +164,10 @@ class AppViewModel(private val sleepDisorderModel: SleepDisorderModel): ViewMode
             _datasets.value = data
         }
     }
+
+    fun reset(){
+        _uiState.value = AppUiState(SleepDisorderFeatures())
+    }
 }
 
 data class PredictionResult(
