@@ -15,6 +15,7 @@ object Destination {
     const val PREDICT = "predict"
     const val DATASETS = "datasets"
     const val ABOUT = "about"
+    const val FEATURES = "features"
 }
 
 @Composable

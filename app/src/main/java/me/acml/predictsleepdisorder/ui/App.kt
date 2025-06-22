@@ -31,6 +31,7 @@ import me.acml.predictsleepdisorder.ui.libs.rememberPredictSleepDisorderControll
 import me.acml.predictsleepdisorder.ui.libs.spatialExpressiveSpring
 import me.acml.predictsleepdisorder.ui.screens.about.AboutScreen
 import me.acml.predictsleepdisorder.ui.screens.datasets.DatasetsScreen
+import me.acml.predictsleepdisorder.ui.screens.features.FeaturesScreen
 import me.acml.predictsleepdisorder.ui.screens.home.HomeScreen
 import me.acml.predictsleepdisorder.ui.screens.predict.PredictScreen
 
@@ -125,6 +126,37 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel) {
                 ) { backStackEntry ->
                     DatasetsScreen(
                         datasets = viewModel.datasets.collectAsState().value,
+                        back = {
+                            navController.upPress()
+                        }
+                    )
+                }
+                composableWithCompositionLocal(
+                    route = Destination.FEATURES,
+                    enterTransition = {
+                        slideIn(
+                            initialOffset = { fullSize ->
+                                IntOffset(
+                                    x = 0,
+                                    y = fullSize.height
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    },
+                    exitTransition = {
+                        slideOut(
+                            targetOffset = { fullSize ->
+                                IntOffset(
+                                    x = 0,
+                                    y = fullSize.height
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    }
+                ) { backStackEntry ->
+                    FeaturesScreen(
                         back = {
                             navController.upPress()
                         }

@@ -39,6 +39,7 @@ data class Menu(
 val menus = arrayOf(
     Menu("Predict", Destination.PREDICT, R.drawable.rounded_sleep_score_24),
     Menu("Datasets", Destination.DATASETS, R.drawable.rounded_database_24),
+    Menu("Features", Destination.FEATURES, R.drawable.rounded_featured_play_list_24)
 )
 
 @Composable

@@ -22,4 +22,7 @@
     <string name="datasets_description">Dataset ini terdiri dari 13 Kolom dan 374 Baris yang ditampilkan dalam tabel di bawah. Kumpulan data yang dipertimbangkan mencakup banyak informasi penting terkait individu dan kesehatan mereka, seperti Person ID, Gender, Age, Occupation, Sleep Duration, Quality of Sleep, Physical Activity Level, Stress Level, BMI Category, Blood Pressure, Heart Rate, Daily Steps, dan Sleep Disorder.\n\nData ini sangat berharga untuk membuat analisis dan pengambilan keputusan yang bertujuan meningkatkan kualitas hidup, pemantauan kesehatan, dan pola tidur. Dengan memahami faktor-faktor ini secara lebih mendetail, kita bisa merancang solusi untuk memperbaiki gaya hidup dan kesehatan secara keseluruhan.</string>
     <string name="preview">Preview</string>
     <string name="view_all">View all</string>
+    <string name="feature_data_type">Data type</string>
+    <string name="feature_value_type">Value type</string>
+    <string name="features">Features</string>
 </resources>
