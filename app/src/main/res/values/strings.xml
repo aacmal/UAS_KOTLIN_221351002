@@ -11,4 +11,7 @@
     <string name="prediction_result">Prediction Result</string>
     <string name="systolic">Systolic</string>
     <string name="diastolic">Diastolic</string>
+    <string name="enter_your_age">Pick your age and gender</string>
+    <string name="next_step">Next</string>
+    <string name="year">Year</string>
 </resources>

@@ -136,6 +136,20 @@ class AppViewModel(private val sleepDisorderModel: SleepDisorderModel): ViewMode
             features = _uiState.value.features.copy(bmi = bmi)
         )
     }
+
+    fun nextStep() {
+        _uiState.value = _uiState.value.copy(
+            step = _uiState.value.step + 1
+        )
+    }
+
+    fun previousStep() {
+        if (_uiState.value.step > 0) {
+            _uiState.value = _uiState.value.copy(
+                step = _uiState.value.step - 1
+            )
+        }
+    }
 }
 
 data class PredictionResult(
@@ -145,4 +159,5 @@ data class PredictionResult(
 data class AppUiState(
     val features: SleepDisorderFeatures,
     val predictionResult: PredictionResult? = null,
+    val step: Int = 1
 )
