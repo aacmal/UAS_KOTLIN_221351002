@@ -31,4 +31,9 @@
     <string name="overview">Overview</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="how_long">How long do you sleep a day?</string>
+    <string name="hour">hour</string>
+    <string name="check_form">Please complete this form before countinue</string>
+    <string name="how_sleep_quality">How your sleep quality?</string>
+    <string name="how_your_stress_level">How are you feeling overall today?</string>
 </resources>

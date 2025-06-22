@@ -1,7 +1,5 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,41 +27,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.acml.predictsleepdisorder.R
-import me.acml.predictsleepdisorder.ui.components.GenderPicker
-import me.acml.predictsleepdisorder.ui.components.HorizontalWheel
+import me.acml.predictsleepdisorder.ui.components.StressLevelPicker
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 
 @Composable
-fun StepOne(
-    age: Int,
-    onAgeChange: (Int) -> Unit,
-    gender: String?,
-    onGenderChange: (String) -> Unit = {},
+fun StepFour(
+    stressLevel: Float,
+    onStressLevelChange: (Float) -> Unit = {},
     onNext: () -> Unit = {}
-) {
-    val context = LocalContext.current
-    val warning = stringResource(R.string.check_form)
-    fun nextStep() {
-        if (gender == "null") {
-            Toast.makeText(
-                context,
-                warning,
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
-            onNext()
-        }
-    }
+){
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
-            .then(
-                Modifier.padding(horizontal = 16.dp)
-            )
+            .padding(horizontal = 16.dp)
     ) {
         Text(
-            stringResource(R.string.enter_your_age),
+            stringResource(R.string.how_your_stress_level),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(bottom = 30.dp)
@@ -72,26 +51,20 @@ fun StepOne(
             style = PredictSleepDisorderTheme.typography.titleLarge.copy(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
-                fontSize = 45.sp,
+                fontSize = 30.sp,
                 lineHeight = 50.sp,
             )
         )
-        HorizontalWheel(
-            value = age.toFloat(),
-            onValueChange = {
-                onAgeChange(it.toInt())
+        StressLevelPicker(
+            selectedIndex = stressLevel.toInt(),
+            onSelectionChange = { index ->
+                onStressLevelChange(index.toFloat())
             },
-            ranges = (27..59).map { it.toFloat() }.toList()
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        GenderPicker(
-            selectedGender = gender,
-            onSelectionChange = onGenderChange,
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(
             onClick = {
-                nextStep()
+                onNext()
             },
             modifier = Modifier.align(Alignment.End),
             colors = ButtonDefaults.buttonColors(
@@ -116,11 +89,10 @@ fun StepOne(
 
 @Composable
 @Preview
-private fun StepOnePreview() {
-    StepOne(
-        age = 30,
-        onAgeChange = {},
-        gender = "Male",
-        onGenderChange = {}
+fun StepFourPreview() {
+    StepFour(
+        stressLevel = 5f,
+        onStressLevelChange = {},
+        onNext = {}
     )
 }

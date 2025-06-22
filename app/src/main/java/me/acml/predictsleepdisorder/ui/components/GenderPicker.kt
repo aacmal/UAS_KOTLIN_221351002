@@ -41,7 +41,7 @@ val gender = listOf("Male", "Female")
 
 @Composable
 fun GenderPicker(
-    selectedGender: String = "Male",
+    selectedGender: String? = "Male",
     onSelectionChange: (String) -> Unit,
 ) {
     BoxWithConstraints(

@@ -8,6 +8,9 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -33,6 +36,7 @@ import me.acml.predictsleepdisorder.ui.LocalSharedTransitionScope
 import me.acml.predictsleepdisorder.ui.libs.PredictBoundsKey
 import me.acml.predictsleepdisorder.ui.libs.boundsTransform
 import me.acml.predictsleepdisorder.ui.libs.nonSpatialExpressiveSpring
+import me.acml.predictsleepdisorder.ui.libs.spatialExpressiveSpring
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
@@ -119,6 +123,26 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                 AnimatedContent(
                     targetState = step,
                     label = "PredictStepContent",
+                    transitionSpec = {
+                        if (targetState > initialState) {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = spatialExpressiveSpring()
+                            ) togetherWith slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                                animationSpec = spatialExpressiveSpring()
+                            )
+                        } else {
+                            // Previous step: slide dari kiri ke kanan
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> -fullWidth },
+                                animationSpec = spatialExpressiveSpring()
+                            ) togetherWith slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = spatialExpressiveSpring()
+                            )
+                        }
+                    }
                 ) { targetState ->
                     when (targetState) {
                         1 -> StepOne(
@@ -128,6 +152,36 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                             gender = features.gender.toString(),
                             onGenderChange = {
                                 viewModel.updateGender(it)
+                            },
+                            onNext = {
+                                viewModel.nextStep()
+                            }
+                        )
+                        2 -> StepTwo(
+                            sleepDuration = features.sleepDuration,
+                            onSleepDuration = {
+                                viewModel.updateSleepDuration(it.toFloat())
+                            },
+                            onNext = {
+                                viewModel.nextStep()
+                            }
+                        )
+                        3 -> StepThree(
+                            sleepQuality = features.qualityOfSleep,
+                            onSleepQualityChange = {
+                                viewModel.updateQualityOfSleep(it.toFloat())
+                            },
+                            onNext = {
+                                viewModel.nextStep()
+                            }
+                        )
+                        4 -> StepFour(
+                            stressLevel = features.stressLevel,
+                            onStressLevelChange = {
+                                viewModel.updateStressLevel(it.toFloat())
+                            },
+                            onNext = {
+                                viewModel.nextStep()
                             }
                         )
                     }
