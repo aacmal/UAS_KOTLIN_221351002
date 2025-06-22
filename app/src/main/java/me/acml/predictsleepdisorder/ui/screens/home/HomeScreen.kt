@@ -13,7 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,20 +34,49 @@ data class Menu(
     val name: String,
     val destination: String,
     val icon: Int,
+    val description: String = "",
 )
 
 val menus = arrayOf(
-    Menu("Predict", Destination.PREDICT, R.drawable.rounded_sleep_score_24),
-    Menu("Datasets", Destination.DATASETS, R.drawable.rounded_database_24),
-    Menu("Features", Destination.FEATURES, R.drawable.rounded_featured_play_list_24),
-    Menu("Modeling", Destination.MODELING, R.drawable.rounded_model_training_24)
+    Menu(
+        "Datasets",
+        Destination.DATASETS,
+        R.drawable.rounded_database_24,
+        "Lihat dataset yang digunakan untuk melatih model"
+    ),
+    Menu(
+        "Features", Destination.FEATURES, R.drawable.rounded_featured_play_list_24,
+        "Lihat fitur yang digunakan untuk melatih model"
+    ),
+    Menu(
+        "Modeling", Destination.MODELING, R.drawable.rounded_model_training_24,
+        "Lihat proses membangun model dan arsitektur model yang digunakan"
+    )
 )
 
 @Composable
 fun HomeScreen(
     navigateTo: (String) -> Unit = {},
 ) {
-    Scaffold { innerPadding ->
+    Scaffold(
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = {
+                    navigateTo(Destination.PREDICT)
+                },
+                text = {
+                    Text(
+                        text = stringResource(R.string.predict),
+                    )
+                },
+                icon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.rounded_sleep_score_24),
+                        contentDescription = "Predict"
+                    )
+                })
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -99,19 +128,35 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
+                        Row {
                             Icon(
                                 imageVector = ImageVector.vectorResource(menu.icon),
                                 contentDescription = null,
                                 modifier = Modifier.padding(16.dp)
                             )
-                            Text(
-                                menu.name,
-                                style = PredictSleepDisorderTheme.typography.bodyLarge,
+                            Column(
                                 modifier = Modifier
-                            )
+                                    .fillMaxWidth()
+                                    .padding(vertical = 12.dp)
+                                    .weight(1f),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Text(
+                                    menu.name,
+                                    style = PredictSleepDisorderTheme.typography.bodyLarge,
+                                    modifier = Modifier
+                                )
+                                if (menu.description.isNotEmpty()) {
+                                    Text(
+                                        menu.description,
+                                        style = PredictSleepDisorderTheme.typography.bodySmall.copy(
+                                            color = PredictSleepDisorderTheme.colors.onSurfaceVariant,
+                                        ),
+                                        modifier = Modifier.padding(top = 6.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }

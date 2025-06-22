@@ -81,7 +81,7 @@ val contents = arrayOf(
             "Hidden Layer 3: Dense layer dengan 16 neuron, aktivasi ReLU",
             "Output Layer: 3 neuron dengan aktivasi softmax untuk klasifikasi 3 kelas",
         ),
-        image = R.drawable.architecture_model
+        image = R.drawable.model_architecture
     ),
 )
 
@@ -121,7 +121,7 @@ fun ModelingScreen(
         ) {
             Spacer(Modifier.height(12.dp))
             Text(
-                stringResource(R.string.model_architecture),
+                stringResource(R.string.overview),
                 style = PredictSleepDisorderTheme.typography.bodyLarge.copy(
                     color = PredictSleepDisorderTheme.colors.primary,
                     fontWeight = FontWeight.SemiBold
