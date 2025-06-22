@@ -5,13 +5,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,8 +17,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,9 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -136,9 +129,9 @@ fun AgePicker(
                             .padding(16.dp),
                         style = MaterialTheme.typography.headlineMedium,
                         color = if (isCentered)
-                            MaterialTheme.colorScheme.primary
+                            Color.White
                         else
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            Color.White.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -153,11 +146,11 @@ fun AgePicker(
                 .align(Alignment.Center)
                 .border(
                     width = 1.5.dp,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = Color.White,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .background(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    color = Color.White.copy(alpha = 0.1f),
                     shape = RoundedCornerShape(8.dp)
                 )
         )
@@ -170,7 +163,7 @@ fun AgePicker(
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.primary,
                             Color.Transparent
                         )
                     )
@@ -187,7 +180,7 @@ fun AgePicker(
                     Brush.horizontalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            MaterialTheme.colorScheme.background
+                            MaterialTheme.colorScheme.primary
                         )
                     )
                 )
@@ -195,6 +188,7 @@ fun AgePicker(
         )
     }
 }
+
 @Preview
 @Composable
 private fun AgePickerPreview() {

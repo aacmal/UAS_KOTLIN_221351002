@@ -67,6 +67,9 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel) {
                 ) { backStackEntry ->
                     PredictScreen(
                         viewModel = viewModel,
+                        back = {
+                            navController.upPress()
+                        }
                     )
                 }
                 composableWithCompositionLocal(
