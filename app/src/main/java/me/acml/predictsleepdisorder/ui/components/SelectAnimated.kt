@@ -50,7 +50,7 @@ fun SelectAnimated(
     val selectedIndex = if (selectedItem != null && selectedItem in items) {
         items.indexOf(selectedItem)
     } else {
-        0
+        -1
     }
 
     val indicatorOffset by animateDpAsState(

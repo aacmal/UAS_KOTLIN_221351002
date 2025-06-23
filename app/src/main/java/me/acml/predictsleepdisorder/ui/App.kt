@@ -34,6 +34,7 @@ import me.acml.predictsleepdisorder.ui.screens.datasets.DatasetsScreen
 import me.acml.predictsleepdisorder.ui.screens.features.FeaturesScreen
 import me.acml.predictsleepdisorder.ui.screens.home.HomeScreen
 import me.acml.predictsleepdisorder.ui.screens.modeling.ModelingScreen
+import me.acml.predictsleepdisorder.ui.screens.predict.PredictResultScreen
 import me.acml.predictsleepdisorder.ui.screens.predict.PredictScreen
 
 
@@ -69,6 +70,9 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel) {
                         viewModel = viewModel,
                         back = {
                             navController.upPress()
+                        },
+                        toResult = {
+                            navController.navigateToPredictionResult()
                         }
                     )
                 }
@@ -195,6 +199,19 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel) {
                         back = {
                             navController.upPress()
                         }
+                    )
+                }
+                composableWithCompositionLocal(
+                    route = Destination.PREDICT_RESULT,
+                ) {
+                    PredictResultScreen(
+                        toHome = {
+                            navController.navigateToHome()
+                        },
+                        toPredict = {
+                            navController.navigateToPredict()
+                        },
+                        viewModel = viewModel,
                     )
                 }
             }

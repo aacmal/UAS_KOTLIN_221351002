@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
@@ -17,6 +18,7 @@ object Destination {
     const val ABOUT = "about"
     const val FEATURES = "features"
     const val MODELING = "modeling"
+    const val PREDICT_RESULT = "predict_result"
 }
 
 @Composable
@@ -44,9 +46,40 @@ class PredictSleepDisorderController(
         }
     }
 
-    fun navigateToPredict(from: NavBackStackEntry, addNewCategory: Boolean = true) {
-        if (from.lifecycleIsResumed()) {
-            navController.navigate(Destination.PREDICT)
+    fun navigateToPredictionResult(){
+        // remove all previous destinations
+        if (navController.currentBackStackEntry?.lifecycleIsResumed() == true) {
+            navController.navigate(Destination.PREDICT_RESULT) {
+                popUpTo(navController.graph.startDestination?.id ?: 0) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+    }
+
+    fun navigateToHome(){
+        // remove all previous destinations
+        if (navController.currentBackStackEntry?.lifecycleIsResumed() == true) {
+            navController.navigate(Destination.HOME) {
+                popUpTo(0) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+    }
+
+    fun navigateToPredict() {
+        // remove all previous destinations
+        if (navController.currentBackStackEntry?.lifecycleIsResumed() == true) {
+            navController.navigate(Destination.PREDICT) {
+                popUpTo(0) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
         }
     }
 }

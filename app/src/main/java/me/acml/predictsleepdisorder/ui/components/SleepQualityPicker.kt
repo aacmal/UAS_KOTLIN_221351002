@@ -123,7 +123,7 @@ fun SleepQualityPicker(
 }
 
 // Fungsi helper untuk convert index ke nilai (4-9)
-fun indexToSleepValue(index: Int): Int = index + 4
+fun indexToSleepQualityValue(index: Int): Int = index + 4
 
 // Fungsi helper untuk convert nilai (4-9) ke index
 fun sleepValueToIndex(value: Int): Int = (value - 4).coerceIn(0, 5)

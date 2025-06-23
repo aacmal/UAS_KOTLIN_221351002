@@ -1,5 +1,6 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterExitState
@@ -32,11 +33,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -52,10 +53,12 @@ import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
+fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     val features = uiState.features
     val step = uiState.step
+
+    val context = LocalContext.current
 
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No SharedTransitionScope found")
@@ -85,6 +88,16 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
         }
     }
 
+    fun onProceed(){
+        try {
+            features.validate()
+            toResult()
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            return
+        }
+    }
+
     BackHandler {
         onBack()
     }
@@ -110,7 +123,9 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                     actions = {
                         if (step == 8) {
                             Button(
-                                onClick = {},
+                                onClick = {
+                                    onProceed()
+                                },
                                 modifier = Modifier.padding(end = 8.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color.White,

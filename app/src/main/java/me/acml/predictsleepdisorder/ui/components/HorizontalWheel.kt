@@ -1,5 +1,6 @@
 package me.acml.predictsleepdisorder.ui.components
 
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -26,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 import kotlin.math.abs
 
@@ -46,15 +49,24 @@ fun HorizontalWheel(
     onValueChange: (Float) -> Unit,
     ranges: List<Float>,
 ) {
-    val state = rememberLazyListState()
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val itemWidthDp = 70.dp
     val padding = (screenWidth - itemWidthDp) / 2
 
-    var isInternalUpdate by remember { mutableStateOf(false) }
+    var savedScrollIndex by rememberSaveable {
+        mutableIntStateOf(ranges.indexOf(value).takeIf { it != -1 } ?: 0)
+    }
 
-    var centerIndex by remember { mutableIntStateOf(ranges.indexOf(value)) }
+    // LazyListState dengan initial position
+    val state = rememberLazyListState(
+        initialFirstVisibleItemIndex = savedScrollIndex
+    )
+
+    var isInternalUpdate by remember { mutableStateOf(false) }
+    var isInitialized by remember { mutableStateOf(false) }
+
+    var centerIndex by remember { mutableIntStateOf(savedScrollIndex) }
 
     val currentCenterIndex by remember {
         derivedStateOf {
@@ -72,10 +84,12 @@ fun HorizontalWheel(
 
     LaunchedEffect(currentCenterIndex) {
         centerIndex = currentCenterIndex
+        // Simpan posisi scroll terbaru
+        savedScrollIndex = currentCenterIndex
     }
 
     LaunchedEffect(state.isScrollInProgress) {
-        if (!state.isScrollInProgress && !isInternalUpdate) {
+        if (!state.isScrollInProgress && !isInternalUpdate && isInitialized) {
             val centerAge = ranges.getOrNull(centerIndex)
             if (centerAge != null && centerAge != value) {
                 isInternalUpdate = true
@@ -85,12 +99,21 @@ fun HorizontalWheel(
         }
     }
 
-    // Auto scroll ke selected value hanya ketika value berubah dari external
+    LaunchedEffect(state.layoutInfo.totalItemsCount) {
+        if (state.layoutInfo.totalItemsCount > 0 && !isInitialized) {
+            delay(100)
+            state.scrollToItem(savedScrollIndex, scrollOffset = 45)
+            isInitialized = true
+        }
+    }
+
     LaunchedEffect(value) {
-        if (!isInternalUpdate) {
-            val index = ranges.indexOf(value)
-            if (index != -1) {
-                state.animateScrollToItem(index, scrollOffset = 45)
+        if (!isInternalUpdate && isInitialized) {
+            val targetIndex = ranges.indexOf(value)
+            if (targetIndex != -1 && targetIndex != centerIndex) {
+                centerIndex = targetIndex
+                savedScrollIndex = targetIndex
+                state.animateScrollToItem(targetIndex, scrollOffset = 45)
             }
         }
     }

@@ -49,4 +49,6 @@
     <string name="years">Years old</string>
     <string name="cancel_action">Cancel</string>
     <string name="proceed">Proceed</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="predict_again">Predict Again</string>
 </resources>

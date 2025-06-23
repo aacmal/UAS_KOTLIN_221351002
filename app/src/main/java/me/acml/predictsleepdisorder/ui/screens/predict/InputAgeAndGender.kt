@@ -33,6 +33,7 @@ import me.acml.predictsleepdisorder.ui.components.GenderPicker
 import me.acml.predictsleepdisorder.ui.components.HorizontalWheel
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 
+
 @Composable
 fun InputAgeAndGender(
     age: Int,
@@ -41,6 +42,7 @@ fun InputAgeAndGender(
     onGenderChange: (String) -> Unit = {},
     onNext: () -> Unit = {}
 ) {
+    val ageRanges = (27..59).map { it.toFloat() }.toList()
     val context = LocalContext.current
     val warning = stringResource(R.string.check_form)
     fun nextStep() {
@@ -80,7 +82,7 @@ fun InputAgeAndGender(
             onValueChange = {
                 onAgeChange(it.toInt())
             },
-            ranges = (27..59).map { it.toFloat() }.toList()
+            ranges = ageRanges,
         )
         Text(
             stringResource(R.string.years),

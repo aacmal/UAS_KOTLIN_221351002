@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.acml.predictsleepdisorder.ml.SleepDisorderFeatures
 import me.acml.predictsleepdisorder.ml.SleepDisorderModel
+import me.acml.predictsleepdisorder.ui.components.indexToSleepQualityValue
+import me.acml.predictsleepdisorder.ui.components.indexToStressLevelValue
 import me.acml.predictsleepdisorder.ui.libs.readCsvFromAssets
 
 class AppViewModelFactory(
@@ -31,20 +33,22 @@ class AppViewModel(private val sleepDisorderModel: SleepDisorderModel): ViewMode
     val datasets = _datasets.asStateFlow()
 
     fun makePrediction() {
+        // validate features
+        _uiState.value.features.validate()
         val prediction = sleepDisorderModel.predict(
             floatArrayOf(
                 _uiState.value.features.age,
                 _uiState.value.features.sleepDuration,
-                _uiState.value.features.qualityOfSleep,
+                indexToSleepQualityValue(_uiState.value.features.qualityOfSleep.toInt()).toFloat(),
+                indexToStressLevelValue(_uiState.value.features.stressLevel.toInt()).toFloat(),
                 _uiState.value.features.physicalActivityLevel,
-                _uiState.value.features.stressLevel,
                 _uiState.value.features.heartRate,
                 _uiState.value.features.dailySteps,
                 _uiState.value.features.systolicBP,
                 _uiState.value.features.diastolicBP,
-                ModelConstants.getGenderCode("Female"),
-                ModelConstants.getOccupationCode("Sales Representative"),
-                ModelConstants.getBMICode("Obese")
+                ModelConstants.getGenderCode(_uiState.value.features.gender!!),
+                ModelConstants.getOccupationCode(_uiState.value.features.occupation!!),
+                ModelConstants.getBMICode(_uiState.value.features.bmi!!)
             )
 //            floatArrayOf(
 //                28f, // Example age
@@ -65,6 +69,11 @@ class AppViewModel(private val sleepDisorderModel: SleepDisorderModel): ViewMode
                 predictedClass = prediction.label,
                 confidence = prediction.confidence
             )
+        )
+        // Reset features after prediction
+        _uiState.value = _uiState.value.copy(
+            features = SleepDisorderFeatures(),
+            step = 1 // Reset step to 1 after prediction
         )
     }
 

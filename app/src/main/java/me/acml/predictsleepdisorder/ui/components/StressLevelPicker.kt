@@ -121,7 +121,7 @@ fun StressLevelPicker(
 }
 
 // Helper untuk convert index ke nilai stress
-fun indexToStressValue(index: Int): Int {
+fun indexToStressLevelValue(index: Int): Int {
     val stressValues = arrayOf(3, 4, 5, 6, 7, 8)
     return stressValues[index.coerceIn(0, stressValues.lastIndex)]
 }
