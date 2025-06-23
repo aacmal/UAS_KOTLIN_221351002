@@ -36,4 +36,17 @@
     <string name="check_form">Please complete this form before countinue</string>
     <string name="how_sleep_quality">How your sleep quality?</string>
     <string name="how_your_stress_level">How are you feeling overall today?</string>
+    <string name="how_activity_level">How much physical activity do you do per day? Please state in average number of minutes per day.</string>
+    <string name="minutes">Minutes</string>
+    <string name="enter_heart_rate">What is your average resting heart rate (in beats per minute)?</string>
+    <string name="blood_preasure_question">What is your blood pressure at the time of rest?</string>
+    <string name="bpm">BPM (Bits Per Minute)</string>
+    <string name="mmhg">mmHg</string>
+    <string name="steps">Steps</string>
+    <string name="how_many_steps">What is your average number of steps a day?</string>
+    <string name="input_bmi">Which category best describes your BMI?</string>
+    <string name="inptut_occupation">What is your current occupation?</string>
+    <string name="years">Years old</string>
+    <string name="cancel_action">Cancel</string>
+    <string name="proceed">Proceed</string>
 </resources>

@@ -12,24 +12,35 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import me.acml.predictsleepdisorder.R
 import me.acml.predictsleepdisorder.ui.AppViewModel
 import me.acml.predictsleepdisorder.ui.LocalNavAnimatedVisibilityScope
 import me.acml.predictsleepdisorder.ui.LocalSharedTransitionScope
@@ -64,6 +75,7 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
             EnterExitState.PostExit -> 50.dp
         }
     }
+
     fun onBack() {
         if (step > 1) {
             viewModel.previousStep()
@@ -95,6 +107,53 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                             )
                         }
                     },
+                    actions = {
+                        if (step == 8) {
+                            Button(
+                                onClick = {},
+                                modifier = Modifier.padding(end = 8.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.White,
+                                    contentColor = PredictSleepDisorderTheme.colors.primary
+                                ),
+                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                            ) {
+                                Text(
+                                    stringResource(R.string.proceed),
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.rounded_sleep_score_24),
+                                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                                    contentDescription = stringResource(R.string.proceed)
+                                )
+                            }
+                        } else {
+                            Button(
+                                onClick = {
+                                    viewModel.reset()
+                                    back()
+                                },
+                                modifier = Modifier.padding(end = 8.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Gray,
+                                    contentColor = Color.White
+                                ),
+                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                            ) {
+                                Text(
+                                    stringResource(R.string.cancel_action),
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.rounded_cancel_24),
+                                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                                    contentDescription = stringResource(R.string.cancel_action)
+                                )
+                            }
+
+                        }
+                    }
                 )
             },
             containerColor = PredictSleepDisorderTheme.colors.primary,
@@ -145,7 +204,7 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                     }
                 ) { targetState ->
                     when (targetState) {
-                        1 -> StepOne(
+                        1 -> InputAgeAndGender(
                             age = features.age.toInt(), onAgeChange = {
                                 viewModel.updateAge(it.toFloat())
                             },
@@ -157,7 +216,8 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                                 viewModel.nextStep()
                             }
                         )
-                        2 -> StepTwo(
+
+                        2 -> InputSleepDuration(
                             sleepDuration = features.sleepDuration,
                             onSleepDuration = {
                                 viewModel.updateSleepDuration(it.toFloat())
@@ -166,7 +226,40 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                                 viewModel.nextStep()
                             }
                         )
-                        3 -> StepThree(
+
+                        3 -> InputActivityLevel(
+                            activityLevel = features.physicalActivityLevel,
+                            onActivityLevelChange = {
+                                viewModel.updatePhysicalActivityLevel(it.toFloat())
+                            },
+                            dailySteps = features.dailySteps,
+                            onDailyStepsChange = {
+                                viewModel.updateDailySteps(it.toFloat())
+                            },
+                            onNext = {
+                                viewModel.nextStep()
+                            }
+                        )
+
+                        4 -> InputHeartAndBloodPressureProperties(
+                            heartRate = features.heartRate,
+                            onHeartRateChange = {
+                                viewModel.updateHeartRate(it.toFloat())
+                            },
+                            systolic = features.systolicBP,
+                            onSystolicChange = {
+                                viewModel.updateSystolicBP(it.toFloat())
+                            },
+                            diastolic = features.diastolicBP,
+                            onDiastolicChange = {
+                                viewModel.updateDiastolicBP(it.toFloat())
+                            },
+                            onNext = {
+                                viewModel.nextStep()
+                            }
+                        )
+
+                        5 -> InputSleepQuality(
                             sleepQuality = features.qualityOfSleep,
                             onSleepQualityChange = {
                                 viewModel.updateQualityOfSleep(it.toFloat())
@@ -175,13 +268,31 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit) {
                                 viewModel.nextStep()
                             }
                         )
-                        4 -> StepFour(
+
+                        6 -> InputStressLevel(
                             stressLevel = features.stressLevel,
                             onStressLevelChange = {
                                 viewModel.updateStressLevel(it.toFloat())
                             },
                             onNext = {
                                 viewModel.nextStep()
+                            }
+                        )
+
+                        7 -> InputBMI(
+                            bmi = features.bmi,
+                            onBmiChange = {
+                                viewModel.updateBMI(it)
+                            },
+                            onNext = {
+                                viewModel.nextStep()
+                            }
+                        )
+
+                        8 -> InputOccupation(
+                            occupation = features.occupation,
+                            onOccupationChange = {
+                                viewModel.updateOccupation(it)
                             }
                         )
                     }

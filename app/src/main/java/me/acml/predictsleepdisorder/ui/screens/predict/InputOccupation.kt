@@ -1,5 +1,7 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
@@ -23,76 +27,43 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.acml.predictsleepdisorder.R
-import me.acml.predictsleepdisorder.ui.components.StressLevelPicker
+import me.acml.predictsleepdisorder.ui.ModelConstants
+import me.acml.predictsleepdisorder.ui.components.SelectAnimated
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 
 @Composable
-fun StepFour(
-    stressLevel: Float,
-    onStressLevelChange: (Float) -> Unit = {},
-    onNext: () -> Unit = {}
-){
+fun InputOccupation(
+    occupation: String?,
+    onOccupationChange: (String) -> Unit,
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
-            stringResource(R.string.how_your_stress_level),
+            stringResource(R.string.inptut_occupation),
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(bottom = 30.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(bottom = 30.dp),
             style = PredictSleepDisorderTheme.typography.titleLarge.copy(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
-                lineHeight = 50.sp,
             )
         )
-        StressLevelPicker(
-            selectedIndex = stressLevel.toInt(),
-            onSelectionChange = { index ->
-                onStressLevelChange(index.toFloat())
+        SelectAnimated(
+            items = ModelConstants.OCCUPATION_MAPPING.keys.toList(),
+            selectedItem = occupation,
+            onSelectionChange = { selected ->
+                onOccupationChange(selected)
             },
         )
-        Spacer(modifier = Modifier.height(40.dp))
-        Button(
-            onClick = {
-                onNext()
-            },
-            modifier = Modifier.align(Alignment.End),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = PredictSleepDisorderTheme.colors.primary
-            ),
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-        ) {
-            Text(
-                stringResource(R.string.next_step),
-            )
-            Spacer(Modifier.width(8.dp))
-            Icon(
-                Icons.AutoMirrored.Filled.ArrowForward,
-                modifier = Modifier.size(ButtonDefaults.IconSize),
-                contentDescription = stringResource(R.string.next_step)
-            )
-        }
-
+        Spacer(modifier = Modifier.height(20.dp))
     }
-}
-
-@Composable
-@Preview
-fun StepFourPreview() {
-    StepFour(
-        stressLevel = 5f,
-        onStressLevelChange = {},
-        onNext = {}
-    )
 }

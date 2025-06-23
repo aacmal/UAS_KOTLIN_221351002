@@ -31,7 +31,7 @@ import me.acml.predictsleepdisorder.ui.components.SleepQualityPicker
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 
 @Composable
-fun StepThree(
+fun InputSleepQuality(
     sleepQuality: Float,
     onSleepQualityChange: (Float) -> Unit = {},
     onNext: () -> Unit = {}
@@ -90,7 +90,7 @@ fun StepThree(
 @Composable
 @Preview
 fun StepThreePreview() {
-    StepThree(
+    InputSleepQuality(
         sleepQuality = 5f,
         onSleepQualityChange = {},
         onNext = {}

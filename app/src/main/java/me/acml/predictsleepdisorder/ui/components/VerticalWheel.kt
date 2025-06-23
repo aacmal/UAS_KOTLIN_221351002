@@ -9,12 +9,12 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -34,23 +34,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
 import kotlin.math.abs
 
 @Composable
-fun HorizontalWheel(
-    fontSize: TextUnit = PredictSleepDisorderTheme.typography.headlineMedium.fontSize,
+fun VerticalWheel(
     value: Float,
     onValueChange: (Float) -> Unit,
     ranges: List<Float>,
 ) {
     val state = rememberLazyListState()
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val itemWidthDp = 70.dp
-    val padding = (screenWidth - itemWidthDp) / 2
+    val itemHeightDp = 60.dp
+    val padding = (132.dp - itemHeightDp) / 2
 
     var isInternalUpdate by remember { mutableStateOf(false) }
 
@@ -61,7 +56,7 @@ fun HorizontalWheel(
             val layoutInfo = state.layoutInfo
             if (layoutInfo.visibleItemsInfo.isEmpty()) return@derivedStateOf centerIndex
 
-            val center = layoutInfo.viewportStartOffset + (layoutInfo.viewportSize.width / 2)
+            val center = layoutInfo.viewportStartOffset + (layoutInfo.viewportSize.height / 2)
 
             layoutInfo.visibleItemsInfo.minByOrNull { item ->
                 val itemCenter = item.offset + (item.size / 2)
@@ -96,16 +91,16 @@ fun HorizontalWheel(
     }
 
     Box(
-        modifier = Modifier.wrapContentHeight()
+        modifier = Modifier.wrapContentWidth()
     ) {
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+        LazyColumn(
+            modifier = Modifier.height(100.dp).align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
             state = state,
             flingBehavior = rememberSnapFlingBehavior(
                 lazyListState = state, snapPosition = SnapPosition.Center
             ),
-            contentPadding = PaddingValues(horizontal = padding)
+            contentPadding = PaddingValues(vertical = padding)
         ) {
             items(ranges.size) { index ->
                 val age = ranges[index]
@@ -124,18 +119,16 @@ fun HorizontalWheel(
 
                 Box(
                     modifier = Modifier
-                        .width(itemWidthDp)
+                        .height(itemHeightDp)
                         .scale(scale),
                 ) {
                     Text(
                         text = text,
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxHeight()
                             .padding(16.dp),
                         softWrap = false,
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontSize = fontSize,
-                        ),
+                        style = MaterialTheme.typography.titleLarge,
                         color = if (isCentered) Color.White
                         else Color.White.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
@@ -147,8 +140,8 @@ fun HorizontalWheel(
         // Center indicator box
         Box(
             modifier = Modifier
-                .width(itemWidthDp + 8.dp)
-                .height(60.dp)
+                .height(itemHeightDp)
+                .width(100.dp)
                 .align(Alignment.Center)
                 .border(
                     width = 1.5.dp, color = Color.White, shape = RoundedCornerShape(8.dp)
@@ -158,34 +151,34 @@ fun HorizontalWheel(
                 )
         )
 
-        // Left gradient overlay
+        // Top gradient overlay
         Box(
             modifier = Modifier
-                .width(padding)
-                .height(60.dp)
+                .height(15.dp)
+                .width(60.dp)
                 .background(
-                    Brush.horizontalGradient(
+                    Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.primary, Color.Transparent
                         )
                     )
                 )
-                .align(Alignment.CenterStart)
+                .align(Alignment.TopCenter)
         )
 
-        // Right gradient overlay
+        // Bottom gradient overlay
         Box(
             modifier = Modifier
-                .width(padding)
-                .height(60.dp)
+                .height(15.dp)
+                .width(60.dp)
                 .background(
-                    Brush.horizontalGradient(
+                    Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent, MaterialTheme.colorScheme.primary
                         )
                     )
                 )
-                .align(Alignment.CenterEnd)
+                .align(Alignment.BottomCenter)
         )
     }
 }
