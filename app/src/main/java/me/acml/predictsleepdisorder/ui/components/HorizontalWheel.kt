@@ -1,6 +1,5 @@
 package me.acml.predictsleepdisorder.ui.components
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

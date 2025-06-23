@@ -1,6 +1,5 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
-import android.util.FloatMath
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

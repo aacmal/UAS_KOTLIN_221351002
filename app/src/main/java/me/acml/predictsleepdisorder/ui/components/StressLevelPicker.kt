@@ -36,7 +36,6 @@ fun StressLevelPicker(
     onSelectionChange: (Int) -> Unit,
 ) {
     // Nilai dan labelnya sudah diurutkan dari kecil ke besar
-    val stressValues = arrayOf(3, 4, 5, 6, 7, 8)
     val stressLabels = listOf(
         "I feel very calm",       // 3
         "I feel quite calm",       // 4
@@ -126,8 +125,3 @@ fun indexToStressLevelValue(index: Int): Int {
     return stressValues[index.coerceIn(0, stressValues.lastIndex)]
 }
 
-// Helper untuk convert nilai stress ke index
-fun stressValueToIndex(value: Int): Int {
-    val stressValues = arrayOf(3, 4, 5, 6, 7, 8)
-    return stressValues.indexOf(value).coerceAtLeast(0)
-}

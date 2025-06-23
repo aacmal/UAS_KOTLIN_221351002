@@ -114,7 +114,6 @@ fun DatasetsScreen(
 @Composable
 fun FullDatasets(datasets: List<List<String>>) {
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Button(
