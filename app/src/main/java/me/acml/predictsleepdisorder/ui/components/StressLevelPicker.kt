@@ -32,18 +32,18 @@ import me.acml.predictsleepdisorder.ui.theme.textField
 
 @Composable
 fun StressLevelPicker(
-    selectedIndex: Int = 0,
+    selectedIndex: Int = -1,
     onSelectionChange: (Int) -> Unit,
 ) {
     // Nilai dan labelnya sudah diurutkan dari kecil ke besar
     val stressValues = arrayOf(3, 4, 5, 6, 7, 8)
     val stressLabels = listOf(
-        "Saya merasa sangat tenang",  // 3
-        "Saya merasa cukup tenang",   // 4
-        "Saya merasa biasa saja",     // 5
-        "Saya merasa agak tertekan",  // 6
-        "Saya merasa cukup tertekan", // 7
-        "Saya merasa sangat tertekan" // 8
+        "I feel very calm",       // 3
+        "I feel quite calm",       // 4
+        "I feel neutral",          // 5
+        "I feel a bit stressed",   // 6
+        "I feel quite stressed",   // 7
+        "I feel very stressed"     // 8
     )
 
     val tabHeight = 56.dp

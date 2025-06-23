@@ -43,16 +43,10 @@ fun InputAgeAndGender(
     onNext: () -> Unit = {}
 ) {
     val ageRanges = (27..59).map { it.toFloat() }.toList()
-    val context = LocalContext.current
-    val warning = stringResource(R.string.check_form)
+    val validateField = rememberFieldValidator()
+
     fun nextStep() {
-        if (gender == "null") {
-            Toast.makeText(
-                context,
-                warning,
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
+        validateField(gender) {
             onNext()
         }
     }

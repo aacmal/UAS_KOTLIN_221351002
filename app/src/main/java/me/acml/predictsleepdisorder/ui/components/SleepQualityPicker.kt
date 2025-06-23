@@ -32,16 +32,16 @@ import me.acml.predictsleepdisorder.ui.theme.textField
 
 @Composable
 fun SleepQualityPicker(
-    selectedIndex: Int = 0, // Index dari 0-5 (untuk nilai 4-9)
+    selectedIndex: Int = -1, // Index dari 0-5 (untuk nilai 4-9)
     onSelectionChange: (Int) -> Unit,
 ) {
     val sleepQualities = listOf(
-        "Tidur saya buruk", // Index 0 = Nilai 4
-        "Tidur saya kurang nyenyak", // Index 1 = Nilai 5
-        "Tidur saya cukup baik", // Index 2 = Nilai 6
-        "Tidur saya lumayan nyenyak", // Index 3 = Nilai 7
-        "Tidur saya sangat nyenyak", // Index 4 = Nilai 8
-        "Tidur saya luar biasa nyenyak" // Index 5 = Nilai 9
+        "My sleep is poor",             // Index 0 = Value 4
+        "My sleep is not very restful", // Index 1 = Value 5
+        "My sleep is fairly good",      // Index 2 = Value 6
+        "My sleep is quite restful",    // Index 3 = Value 7
+        "My sleep is very restful",     // Index 4 = Value 8
+        "My sleep is exceptionally restful" // Index 5 = Value 9
     )
 
     val tabHeight = 56.dp

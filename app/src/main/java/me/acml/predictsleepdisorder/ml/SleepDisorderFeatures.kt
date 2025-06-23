@@ -3,9 +3,9 @@ package me.acml.predictsleepdisorder.ml
 data class SleepDisorderFeatures(
     val age: Float = 29f,
     val sleepDuration: Float = 7f,
-    val qualityOfSleep: Float = 0f,
+    val qualityOfSleep: Float = -1f,
     val physicalActivityLevel: Float = 50f,
-    val stressLevel: Float = 0f,
+    val stressLevel: Float = -1f,
     val heartRate: Float = 75f,
     val dailySteps: Float = 3000f,
     val systolicBP: Float = 115f,

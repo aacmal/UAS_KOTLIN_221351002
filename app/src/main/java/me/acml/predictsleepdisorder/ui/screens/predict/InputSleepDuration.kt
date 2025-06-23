@@ -64,12 +64,13 @@ fun InputSleepDuration(
             ranges = (60..85 step 5).map { (it / 10.0).toFloat() }.toList()
         )
         Text(
-            stringResource(R.string.hour),
+            stringResource(R.string.hours),
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(top = 10.dp)
-                .fillMaxWidth(),
-            style = PredictSleepDisorderTheme.typography.titleLarge
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+            color = Color.White.copy(alpha = 0.7f),
+            style = PredictSleepDisorderTheme.typography.titleSmall
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(

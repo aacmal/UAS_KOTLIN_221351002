@@ -35,6 +35,14 @@ fun InputBMI(
     onBmiChange: (String) -> Unit,
     onNext: () -> Unit,
 ) {
+    val validateField = rememberFieldValidator()
+
+    fun nextStep() {
+        validateField(bmi) {
+            onNext()
+        }
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -68,7 +76,7 @@ fun InputBMI(
         Spacer(modifier = Modifier.height(40.dp))
         Button(
             onClick = {
-                onNext()
+                nextStep()
             },
             modifier = Modifier.align(Alignment.End),
             colors = ButtonDefaults.buttonColors(

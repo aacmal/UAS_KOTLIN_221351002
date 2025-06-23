@@ -65,19 +65,12 @@ fun PredictResultScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Prediction Result: ${predictionResult.predictedClass}",
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth(),
-                style = PredictSleepDisorderTheme.typography.titleLarge.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    lineHeight = 40.sp,
-                )
-            )
-            Text(
-                text = "Based on the analysis, you may be experiencing Sleep Apnea. We recommend consulting a healthcare professional for further evaluation.",
+                text = when (predictionResult.predictedClass){
+                    "Sleep Apnea" -> "Based on the analysis, you may be experiencing Sleep Apnea. We recommend consulting a healthcare professional for further evaluation."
+                    "Insomnia" -> "Based on the analysis, you may be experiencing Insomnia. Consider improving your bedtime routine and seeking professional advice if needed."
+                    "Normal" -> "Based on the analysis, no sleep disorder was detected."
+                    else -> "No prediction available, please try again."
+                },
                 modifier = Modifier
                     .padding(bottom = 30.dp)
                     .fillMaxWidth(),

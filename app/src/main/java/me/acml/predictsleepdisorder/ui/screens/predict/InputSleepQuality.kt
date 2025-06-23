@@ -36,6 +36,13 @@ fun InputSleepQuality(
     onSleepQualityChange: (Float) -> Unit = {},
     onNext: () -> Unit = {}
 ){
+    val validateField = rememberFieldValidator()
+
+    fun nextStep() {
+        validateField(sleepQuality) {
+            onNext()
+        }
+    }
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -64,7 +71,7 @@ fun InputSleepQuality(
         Spacer(modifier = Modifier.height(40.dp))
         Button(
             onClick = {
-                onNext()
+                nextStep()
             },
             modifier = Modifier.align(Alignment.End),
             colors = ButtonDefaults.buttonColors(

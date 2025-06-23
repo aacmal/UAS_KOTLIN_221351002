@@ -93,7 +93,7 @@ fun InputHeartAndBloodPressureProperties(
             VerticalWheel(
                 value = systolic,
                 onValueChange = onSystolicChange,
-                ranges = (115..140 step 2).map { it.toFloat() }.toList(),
+                ranges = (115..140 step 2).map { it.toFloat() }.toList().reversed(),
             )
             Text(
                 text = "/",
@@ -105,7 +105,7 @@ fun InputHeartAndBloodPressureProperties(
             VerticalWheel(
                 value = diastolic,
                 onValueChange = onDiastolicChange,
-                ranges = (75..95 step 2).map { it.toFloat() }.toList(),
+                ranges = (75..95 step 2).map { it.toFloat() }.toList().reversed(),
             )
         }
         Text(

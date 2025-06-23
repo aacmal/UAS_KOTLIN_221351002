@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -316,5 +317,30 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Uni
 
         }
 
+    }
+}
+
+@Composable
+fun rememberFieldValidator(
+    warningMessageResId: Int = R.string.check_form
+): (Any?, () -> Unit) -> Unit {
+    val context = LocalContext.current
+    val warningMessage = stringResource(warningMessageResId)
+
+    return remember {
+        { fieldValue: Any?, onSuccess: () -> Unit ->
+            val isValid = when (fieldValue) {
+                null -> false
+                is String -> fieldValue != "null" && fieldValue.isNotEmpty()
+                is Float -> fieldValue >= 0f
+                else -> true
+            }
+
+            if (!isValid) {
+                Toast.makeText(context, warningMessage, Toast.LENGTH_SHORT).show()
+            } else {
+                onSuccess()
+            }
+        }
     }
 }
