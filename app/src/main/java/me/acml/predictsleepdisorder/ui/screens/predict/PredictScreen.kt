@@ -23,14 +23,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -150,12 +154,6 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Uni
                                     viewModel.reset()
                                     back()
                                 },
-                                modifier = Modifier.padding(end = 8.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color.Gray,
-                                    contentColor = Color.White
-                                ),
-                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                             ) {
                                 Text(
                                     stringResource(R.string.cancel_action),
@@ -190,127 +188,131 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Uni
                     clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(roundedCornerAnim))
                 )
         ) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
+            CompositionLocalProvider(
+                LocalContentColor provides Color.White
             ) {
-                AnimatedContent(
-                    targetState = step,
-                    label = "PredictStepContent",
-                    transitionSpec = {
-                        if (targetState > initialState) {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> fullWidth },
-                                animationSpec = spatialExpressiveSpring()
-                            ) togetherWith slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> -fullWidth },
-                                animationSpec = spatialExpressiveSpring()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    AnimatedContent(
+                        targetState = step,
+                        label = "PredictStepContent",
+                        transitionSpec = {
+                            if (targetState > initialState) {
+                                slideInHorizontally(
+                                    initialOffsetX = { fullWidth -> fullWidth },
+                                    animationSpec = spatialExpressiveSpring()
+                                ) togetherWith slideOutHorizontally(
+                                    targetOffsetX = { fullWidth -> -fullWidth },
+                                    animationSpec = spatialExpressiveSpring()
+                                )
+                            } else {
+                                // Previous step: slide dari kiri ke kanan
+                                slideInHorizontally(
+                                    initialOffsetX = { fullWidth -> -fullWidth },
+                                    animationSpec = spatialExpressiveSpring()
+                                ) togetherWith slideOutHorizontally(
+                                    targetOffsetX = { fullWidth -> fullWidth },
+                                    animationSpec = spatialExpressiveSpring()
+                                )
+                            }
+                        }
+                    ) { targetState ->
+                        when (targetState) {
+                            1 -> InputAgeAndGender(
+                                age = features.age.toInt(), onAgeChange = {
+                                    viewModel.updateAge(it.toFloat())
+                                },
+                                gender = features.gender.toString(),
+                                onGenderChange = {
+                                    viewModel.updateGender(it)
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
                             )
-                        } else {
-                            // Previous step: slide dari kiri ke kanan
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> -fullWidth },
-                                animationSpec = spatialExpressiveSpring()
-                            ) togetherWith slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> fullWidth },
-                                animationSpec = spatialExpressiveSpring()
+
+                            2 -> InputSleepDuration(
+                                sleepDuration = features.sleepDuration,
+                                onSleepDuration = {
+                                    viewModel.updateSleepDuration(it.toFloat())
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
+                            )
+
+                            3 -> InputActivityLevel(
+                                activityLevel = features.physicalActivityLevel,
+                                onActivityLevelChange = {
+                                    viewModel.updatePhysicalActivityLevel(it.toFloat())
+                                },
+                                dailySteps = features.dailySteps,
+                                onDailyStepsChange = {
+                                    viewModel.updateDailySteps(it.toFloat())
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
+                            )
+
+                            4 -> InputHeartAndBloodPressureProperties(
+                                heartRate = features.heartRate,
+                                onHeartRateChange = {
+                                    viewModel.updateHeartRate(it.toFloat())
+                                },
+                                systolic = features.systolicBP,
+                                onSystolicChange = {
+                                    viewModel.updateSystolicBP(it.toFloat())
+                                },
+                                diastolic = features.diastolicBP,
+                                onDiastolicChange = {
+                                    viewModel.updateDiastolicBP(it.toFloat())
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
+                            )
+
+                            5 -> InputSleepQuality(
+                                sleepQuality = features.qualityOfSleep,
+                                onSleepQualityChange = {
+                                    viewModel.updateQualityOfSleep(it.toFloat())
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
+                            )
+
+                            6 -> InputStressLevel(
+                                stressLevel = features.stressLevel,
+                                onStressLevelChange = {
+                                    viewModel.updateStressLevel(it.toFloat())
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
+                            )
+
+                            7 -> InputBMI(
+                                bmi = features.bmi,
+                                onBmiChange = {
+                                    viewModel.updateBMI(it)
+                                },
+                                onNext = {
+                                    viewModel.nextStep()
+                                }
+                            )
+
+                            8 -> InputOccupation(
+                                occupation = features.occupation,
+                                onOccupationChange = {
+                                    viewModel.updateOccupation(it)
+                                }
                             )
                         }
-                    }
-                ) { targetState ->
-                    when (targetState) {
-                        1 -> InputAgeAndGender(
-                            age = features.age.toInt(), onAgeChange = {
-                                viewModel.updateAge(it.toFloat())
-                            },
-                            gender = features.gender.toString(),
-                            onGenderChange = {
-                                viewModel.updateGender(it)
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        2 -> InputSleepDuration(
-                            sleepDuration = features.sleepDuration,
-                            onSleepDuration = {
-                                viewModel.updateSleepDuration(it.toFloat())
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        3 -> InputActivityLevel(
-                            activityLevel = features.physicalActivityLevel,
-                            onActivityLevelChange = {
-                                viewModel.updatePhysicalActivityLevel(it.toFloat())
-                            },
-                            dailySteps = features.dailySteps,
-                            onDailyStepsChange = {
-                                viewModel.updateDailySteps(it.toFloat())
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        4 -> InputHeartAndBloodPressureProperties(
-                            heartRate = features.heartRate,
-                            onHeartRateChange = {
-                                viewModel.updateHeartRate(it.toFloat())
-                            },
-                            systolic = features.systolicBP,
-                            onSystolicChange = {
-                                viewModel.updateSystolicBP(it.toFloat())
-                            },
-                            diastolic = features.diastolicBP,
-                            onDiastolicChange = {
-                                viewModel.updateDiastolicBP(it.toFloat())
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        5 -> InputSleepQuality(
-                            sleepQuality = features.qualityOfSleep,
-                            onSleepQualityChange = {
-                                viewModel.updateQualityOfSleep(it.toFloat())
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        6 -> InputStressLevel(
-                            stressLevel = features.stressLevel,
-                            onStressLevelChange = {
-                                viewModel.updateStressLevel(it.toFloat())
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        7 -> InputBMI(
-                            bmi = features.bmi,
-                            onBmiChange = {
-                                viewModel.updateBMI(it)
-                            },
-                            onNext = {
-                                viewModel.nextStep()
-                            }
-                        )
-
-                        8 -> InputOccupation(
-                            occupation = features.occupation,
-                            onOccupationChange = {
-                                viewModel.updateOccupation(it)
-                            }
-                        )
                     }
                 }
             }

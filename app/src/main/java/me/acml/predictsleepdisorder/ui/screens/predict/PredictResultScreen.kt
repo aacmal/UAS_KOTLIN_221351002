@@ -1,9 +1,7 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,19 +52,17 @@ fun PredictResultScreen(
         return
     }
 
-    Box(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
-            .background(PredictSleepDisorderTheme.colors.background)
-            .systemBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
         Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = when (predictionResult.predictedClass){
+                text = when (predictionResult.predictedClass) {
                     "Sleep Apnea" -> "Based on the analysis, you may be experiencing Sleep Apnea. We recommend consulting a healthcare professional for further evaluation."
                     "Insomnia" -> "Based on the analysis, you may be experiencing Insomnia. Consider improving your bedtime routine and seeking professional advice if needed."
                     "Normal" -> "Based on the analysis, no sleep disorder was detected."
@@ -93,7 +90,10 @@ fun PredictResultScreen(
                     width = 1.dp,
                     color = PredictSleepDisorderTheme.colors.primary
                 ),
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp).height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .height(50.dp),
                 shape = PredictSleepDisorderTheme.shapes.textField
             ) {
                 Icon(
@@ -118,7 +118,9 @@ fun PredictResultScreen(
                     width = 1.dp,
                     color = PredictSleepDisorderTheme.colors.primary
                 ),
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 shape = PredictSleepDisorderTheme.shapes.textField
             ) {
                 Icon(
