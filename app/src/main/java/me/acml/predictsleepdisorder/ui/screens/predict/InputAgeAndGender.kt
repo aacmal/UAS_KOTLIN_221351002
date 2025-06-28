@@ -30,6 +30,8 @@ import me.acml.predictsleepdisorder.R
 import me.acml.predictsleepdisorder.ui.components.GenderPicker
 import me.acml.predictsleepdisorder.ui.components.HorizontalWheel
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
+import me.acml.predictsleepdisorder.ui.theme.backgroundPrimary
+import me.acml.predictsleepdisorder.ui.theme.foregroundPrimary
 
 
 @Composable
@@ -97,8 +99,8 @@ fun InputAgeAndGender(
             },
             modifier = Modifier.align(Alignment.End),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = PredictSleepDisorderTheme.colors.primary
+                containerColor = foregroundPrimary,
+                contentColor = backgroundPrimary
             ),
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
         ) {

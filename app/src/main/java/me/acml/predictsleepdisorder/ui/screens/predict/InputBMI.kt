@@ -1,5 +1,6 @@
 package me.acml.predictsleepdisorder.ui.screens.predict
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -26,15 +26,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.acml.predictsleepdisorder.R
+import me.acml.predictsleepdisorder.ui.LocalNavAnimatedVisibilityScope
+import me.acml.predictsleepdisorder.ui.LocalSharedTransitionScope
 import me.acml.predictsleepdisorder.ui.components.SelectAnimated
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
+import me.acml.predictsleepdisorder.ui.theme.backgroundPrimary
+import me.acml.predictsleepdisorder.ui.theme.foregroundPrimary
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun InputBMI(
     bmi: String?,
     onBmiChange: (String) -> Unit,
     onNext: () -> Unit,
 ) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+        ?: throw IllegalStateException("No SharedTransitionScope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
+        ?: throw IllegalStateException("No SharedElementScope found")
+
     val validateField = rememberFieldValidator()
 
     fun nextStep() {
@@ -43,57 +53,60 @@ fun InputBMI(
         }
     }
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .then(
-                Modifier.padding(horizontal = 16.dp)
-            )
-    ) {
-        Text(
-            stringResource(R.string.input_bmi),
-            textAlign = TextAlign.Center,
+    with(sharedTransitionScope) {
+        Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .padding(bottom = 30.dp)
-                .fillMaxWidth(),
-            style = PredictSleepDisorderTheme.typography.titleLarge.copy(
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
-                lineHeight = 50.sp,
-            )
-        )
-        SelectAnimated(
-            items = listOf(
-                "Overweight", "Normal", "Obese", "Normal Weight"
-            ),
-            selectedItem = bmi,
-            onSelectionChange = { selected ->
-                onBmiChange(selected)
-            },
-        )
-        Spacer(modifier = Modifier.height(40.dp))
-        Button(
-            onClick = {
-                nextStep()
-            },
-            modifier = Modifier.align(Alignment.End),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = PredictSleepDisorderTheme.colors.primary
-            ),
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                .fillMaxSize()
+                .then(
+                    Modifier.padding(horizontal = 16.dp)
+                )
         ) {
             Text(
-                stringResource(R.string.next_step),
+                stringResource(R.string.input_bmi),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(bottom = 30.dp)
+                    .fillMaxWidth(),
+                style = PredictSleepDisorderTheme.typography.titleLarge.copy(
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
+                    lineHeight = 50.sp,
+                )
             )
-            Spacer(Modifier.width(8.dp))
-            Icon(
-                Icons.AutoMirrored.Filled.ArrowForward,
-                modifier = Modifier.size(ButtonDefaults.IconSize),
-                contentDescription = stringResource(R.string.next_step)
+            SelectAnimated(
+                items = listOf(
+                    "Overweight", "Normal", "Obese", "Normal Weight"
+                ),
+                selectedItem = bmi,
+                onSelectionChange = { selected ->
+                    onBmiChange(selected)
+                },
             )
+            Spacer(modifier = Modifier.height(40.dp))
+            Button(
+                onClick = {
+                    nextStep()
+                },
+                modifier = Modifier
+                    .align(Alignment.End),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = foregroundPrimary,
+                    contentColor = backgroundPrimary
+                ),
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+            ) {
+                Text(
+                    stringResource(R.string.next_step),
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowForward,
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                    contentDescription = stringResource(R.string.next_step)
+                )
+            }
         }
     }
 }

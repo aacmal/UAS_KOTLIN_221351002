@@ -1,5 +1,7 @@
 package me.acml.predictsleepdisorder.ui.screens.features
 
+import android.provider.CalendarContract.Colors
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,75 +55,76 @@ val features = arrayOf(
         featureName = "Person ID",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Identitas unik untuk setiap individu dalam dataset. Fitur ini berfungsi sebagai kunci pembeda agar data masing-masing partisipan tetap terstruktur dan mudah diakses secara spesifik."
+        description = "Pengenal unik untuk setiap individu dalam dataset. Fitur ini digunakan untuk membedakan setiap partisipan secara spesifik agar data tetap terstruktur dan tidak terjadi duplikasi identitas."
     ),
     Feature(
         featureName = "Gender",
         dataType = "Object",
         valueType = "Kategorikal",
-        description = "Jenis kelamin individu, biasanya diisi sebagai 'Male' atau 'Female'. Informasi ini berguna untuk mempelajari perbedaan kebutuhan dan kualitas tidur berdasarkan gender."
+        description = "Jenis kelamin dari individu, biasanya tercatat sebagai 'Male' (Laki-laki) atau 'Female' (Perempuan). Informasi ini dapat membantu dalam menganalisis perbedaan pola tidur dan kesehatan berdasarkan gender."
     ),
     Feature(
         featureName = "Age",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Usia individu dalam satuan tahun. Faktor usia mempengaruhi kebutuhan durasi tidur dan pola tidur sehari-hari, sehingga fitur ini penting untuk analisis kesehatan."
+        description = "Usia individu dalam satuan tahun. Usia memiliki pengaruh signifikan terhadap kebutuhan tidur dan kemungkinan munculnya gangguan tidur tertentu."
     ),
     Feature(
         featureName = "Occupation",
         dataType = "Object",
         valueType = "Kategorikal",
-        description = "Jenis pekerjaan individu, misalnya Software Engineer, Teacher, atau lainnya. Informasi ini membantu menganalisis hubungan stres pekerjaan dan aktivitas harian terhadap kualitas tidur."
+        description = "Pekerjaan atau profesi dari individu, seperti Guru, Dokter, atau Software Engineer. Data ini berguna untuk mengkaji hubungan antara tekanan pekerjaan dan kualitas tidur."
     ),
     Feature(
         featureName = "Sleep Duration",
         dataType = "Float64",
         valueType = "Numerik",
-        description = "Durasi tidur individu per hari dalam satuan jam. Fitur ini merupakan indikator utama kualitas istirahat dan kesehatan, serta dapat digunakan untuk melihat kecukupan tidur seseorang."
+        description = "Jumlah jam tidur individu dalam sehari. Durasi tidur merupakan salah satu indikator utama dalam menilai kecukupan istirahat dan kesejahteraan fisik serta mental."
     ),
     Feature(
         featureName = "Quality of Sleep",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Skor kualitas tidur individu, biasanya dalam skala 1 hingga 10. Skor ini mencerminkan seberapa nyenyak dan nyaman tidur seseorang dalam semalam."
+        description = "Penilaian subjektif terhadap kualitas tidur seseorang dalam skala 1 hingga 10. Nilai yang lebih tinggi menunjukkan tidur yang lebih nyenyak dan memulihkan."
     ),
     Feature(
         featureName = "Physical Activity Level",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Tingkat aktivitas fisik individu per hari, misalnya jumlah menit berolahraga. Aktivitas fisik sangat berpengaruh terhadap kualitas tidur dan tingkat stres seseorang."
+        description = "Lama waktu aktivitas fisik yang dilakukan individu per hari, diukur dalam menit. Aktivitas fisik berperan penting dalam menjaga kesehatan serta meningkatkan kualitas tidur."
     ),
     Feature(
         featureName = "Stress Level",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Tingkat stres individu dalam skala numerik, umumnya 1 hingga 10. Semakin tinggi nilainya, semakin besar stres yang dialami dan berpengaruh negatif terhadap kualitas tidur dan kesehatan."
+        description = "Tingkat stres yang dirasakan oleh individu, dinilai dalam skala 1 hingga 10. Skor yang lebih tinggi menunjukkan tingkat stres yang lebih besar dan dapat berdampak negatif pada tidur dan kesehatan."
     ),
     Feature(
         featureName = "BMI Category",
         dataType = "Object",
         valueType = "Kategorikal",
-        description = "Kategori Indeks Massa Tubuh seperti 'Normal', 'Overweight', atau 'Obese'. Informasi ini berguna untuk melihat hubungan berat badan dan risiko gangguan tidur serta kesehatan secara keseluruhan."
+        description = "Kategori Indeks Massa Tubuh individu, seperti 'Underweight', 'Normal', atau 'Overweight'. Kategori ini memberikan indikasi terhadap status berat badan dan potensi risiko kesehatan terkait."
     ),
     Feature(
         featureName = "Blood Pressure",
         dataType = "Object",
         valueType = "Kategorikal",
-        description = "Tekanan darah dalam format Sistolik/Diastolik, contoh '120/80'. Fitur ini mencerminkan kondisi kardiovaskular individu dan dampaknya terhadap kesehatan dan kualitas tidur."
+        description = "Tekanan darah individu yang dituliskan dalam format Sistolik/Diastolik, seperti '120/80'. Informasi ini mencerminkan kesehatan kardiovaskular yang dapat berhubungan dengan gangguan tidur."
     ),
     Feature(
         featureName = "Heart Rate",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Detak jantung per menit (bpm) individu. Heart rate berguna untuk mengetahui kesehatan jantung dan tingkat kebugaran tubuh yang mempengaruhi tidur dan stres."
+        description = "Detak jantung saat istirahat, diukur dalam denyut per menit (bpm). Detak jantung memberikan gambaran kondisi jantung dan kebugaran yang memengaruhi kualitas tidur dan tingkat stres."
     ),
     Feature(
         featureName = "Daily Steps",
         dataType = "Int64",
         valueType = "Numerik",
-        description = "Jumlah langkah harian individu. Fitur ini memberi gambaran tingkat aktivitas dan gaya hidup seseorang, sehingga bisa dikaitkan dengan kualitas tidur dan kesehatan tubuh."
+        description = "Jumlah langkah yang diambil individu dalam sehari. Fitur ini merefleksikan tingkat aktivitas fisik harian dan gaya hidup yang berdampak pada kualitas tidur dan kesehatan secara keseluruhan."
     )
 )
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -222,6 +226,27 @@ private fun FeatureCard(
             ) {
                 Surface(
                     shape = RoundedCornerShape(8.dp),
+                    contentColor = when (dataType) {
+                        "Object" -> Color(0xFFF38181)
+                        "Int64" -> Color(0xFF3F72AF)
+                        "Float64" -> Color(0xFFA4907C)
+                        else -> PredictSleepDisorderTheme.colors.onSurface
+                    },
+                    color = when (dataType) {
+                        "Object" -> Color(0xFFF38181).copy(alpha = 0.2f)
+                        "Int64" -> Color(0xFF3F72AF).copy(alpha = 0.2f)
+                        "Float64" -> Color(0xFFA4907C).copy(alpha = 0.2f)
+                        else -> PredictSleepDisorderTheme.colors.surfaceContainerLow
+                    },
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = when (dataType) {
+                            "Object" -> Color(0xFFF38181)
+                            "Int64" -> Color(0xFF3F72AF)
+                            "Float64" -> Color(0xFFA4907C)
+                            else -> PredictSleepDisorderTheme.colors.outlineVariant
+                        }
+                    )
                 ) {
                     Text(
                         text = dataType,
@@ -242,6 +267,7 @@ private fun FeatureCard(
             Surface(
                 shape = RoundedCornerShape(8.dp),
                 color = PredictSleepDisorderTheme.colors.surfaceContainerLow,
+                shadowElevation = 1.dp,
             ) {
                 Text(
                     text = description,

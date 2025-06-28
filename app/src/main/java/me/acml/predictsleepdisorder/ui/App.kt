@@ -203,17 +203,6 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel) {
                 }
                 composableWithCompositionLocal(
                     route = Destination.PREDICT_RESULT,
-                    enterTransition = {
-                        slideIn(
-                            initialOffset = { fullSize ->
-                                IntOffset(
-                                    x = 0,
-                                    y = fullSize.height
-                                )
-                            },
-                            animationSpec = spatialExpressiveSpring()
-                        )
-                    },
                     exitTransition = {
                         slideOut(
                             targetOffset = { fullSize ->

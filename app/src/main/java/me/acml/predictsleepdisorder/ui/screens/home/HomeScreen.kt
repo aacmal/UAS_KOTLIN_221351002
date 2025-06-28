@@ -14,16 +14,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,6 +42,7 @@ import me.acml.predictsleepdisorder.ui.libs.Destination
 import me.acml.predictsleepdisorder.ui.libs.PredictBoundsKey
 import me.acml.predictsleepdisorder.ui.libs.boundsTransform
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
+import java.time.LocalTime
 
 data class Menu(
     val name: String,
@@ -88,7 +90,6 @@ fun HomeScreen(
         }
 
     with(sharedTransitionScope) {
-
         Scaffold(
             floatingActionButton = {
                 ExtendedFloatingActionButton(
@@ -138,12 +139,10 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        "Greetings", style = PredictSleepDisorderTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
+                    Greetings(
+                        modifier = Modifier.weight(1f)
                     )
-                    Button(onClick = {
+                    TextButton(onClick = {
                         navigateTo(Destination.ABOUT)
                     }) {
                         Row(
@@ -213,6 +212,60 @@ fun HomeScreen(
         }
     }
 }
+
+enum class DayTime {
+    MORNING,
+    AFTERNOON,
+    EVENING,
+    NIGHT
+}
+
+@Composable
+private fun Greetings(
+    modifier: Modifier = Modifier
+) {
+    val localTimeHour = LocalTime.now().hour
+    val dayTime = when (localTimeHour) {
+        in 0..11 -> DayTime.MORNING
+        in 12..15 -> DayTime.AFTERNOON
+        in 16..20 -> DayTime.EVENING
+        in 21..23 -> DayTime.NIGHT
+        else -> DayTime.MORNING
+    }
+
+    Row(
+        modifier = modifier.padding(top = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(
+                id = when (dayTime) {
+                    DayTime.MORNING -> R.drawable.sun
+                    DayTime.AFTERNOON -> R.drawable.sun
+                    DayTime.EVENING -> R.drawable.sun_fog
+                    DayTime.NIGHT -> R.drawable.moon
+                }
+            ),
+            contentDescription = null,
+            modifier = Modifier.size(32.dp)
+        )
+        Text(
+            text = stringResource(
+                when (dayTime) {
+                    DayTime.MORNING -> R.string.good_morning
+                    DayTime.AFTERNOON -> R.string.good_afternoon
+                    DayTime.EVENING -> R.string.good_evening
+                    DayTime.NIGHT -> R.string.good_night
+                }
+            ),
+            style = PredictSleepDisorderTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.SemiBold
+            )
+        )
+    }
+}
+
 
 @Composable
 @Preview

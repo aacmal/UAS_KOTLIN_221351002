@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
+import me.acml.predictsleepdisorder.ui.theme.backgroundPrimary
 import kotlin.math.abs
 
 @Composable
@@ -188,7 +189,7 @@ fun HorizontalWheel(
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.primary, Color.Transparent
+                            backgroundPrimary, Color.Transparent
                         )
                     )
                 )
@@ -203,7 +204,7 @@ fun HorizontalWheel(
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            Color.Transparent, MaterialTheme.colorScheme.primary
+                            Color.Transparent, backgroundPrimary
                         )
                     )
                 )

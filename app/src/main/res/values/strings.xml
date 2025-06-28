@@ -38,7 +38,7 @@
     <string name="how_your_stress_level">How are you feeling overall today?</string>
     <string name="how_activity_level">How much physical activity do you do per day? Please state in average number of minutes per day.</string>
     <string name="minutes">Minutes</string>
-    <string name="enter_heart_rate">What is your average resting heart rate (in beats per minute)?</string>
+    <string name="enter_heart_rate">What is your average resting heart rate?</string>
     <string name="blood_preasure_question">What is your blood pressure at the time of rest?</string>
     <string name="bpm">BPM (Bits Per Minute)</string>
     <string name="mmhg">mmHg</string>
@@ -52,4 +52,8 @@
     <string name="back_to_home">Back to Home</string>
     <string name="predict_again">Predict Again</string>
     <string name="hours">Hours</string>
+    <string name="good_morning">Good morning</string>
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="good_night">Good night</string>
 </resources>

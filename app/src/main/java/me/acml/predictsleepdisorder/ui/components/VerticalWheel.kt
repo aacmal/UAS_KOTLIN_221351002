@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import me.acml.predictsleepdisorder.ui.theme.backgroundPrimary
 import kotlin.math.abs
 
 @Composable
@@ -181,7 +182,7 @@ fun VerticalWheel(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.primary, Color.Transparent
+                            backgroundPrimary, Color.Transparent
                         )
                     )
                 )
@@ -196,7 +197,7 @@ fun VerticalWheel(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color.Transparent, MaterialTheme.colorScheme.primary
+                            Color.Transparent, backgroundPrimary
                         )
                     )
                 )

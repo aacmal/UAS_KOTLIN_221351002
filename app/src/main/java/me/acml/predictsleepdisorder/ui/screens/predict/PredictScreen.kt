@@ -9,6 +9,8 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -23,14 +25,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -51,10 +52,12 @@ import me.acml.predictsleepdisorder.ui.AppViewModel
 import me.acml.predictsleepdisorder.ui.LocalNavAnimatedVisibilityScope
 import me.acml.predictsleepdisorder.ui.LocalSharedTransitionScope
 import me.acml.predictsleepdisorder.ui.libs.PredictBoundsKey
+import me.acml.predictsleepdisorder.ui.libs.PredictResultBoundsKey
 import me.acml.predictsleepdisorder.ui.libs.boundsTransform
 import me.acml.predictsleepdisorder.ui.libs.nonSpatialExpressiveSpring
 import me.acml.predictsleepdisorder.ui.libs.spatialExpressiveSpring
-import me.acml.predictsleepdisorder.ui.theme.PredictSleepDisorderTheme
+import me.acml.predictsleepdisorder.ui.theme.backgroundPrimary
+import me.acml.predictsleepdisorder.ui.theme.foregroundPrimary
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +96,7 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Uni
         }
     }
 
-    fun onProceed(){
+    fun onProceed() {
         try {
             features.validate()
             toResult()
@@ -120,57 +123,89 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Uni
                         IconButton(onClick = { onBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Localized description",
-                                tint = PredictSleepDisorderTheme.colors.onPrimary
+                                contentDescription = "Back",
+                                tint = foregroundPrimary
                             )
                         }
                     },
                     actions = {
-                        if (step == 8) {
-                            Button(
-                                onClick = {
-                                    onProceed()
-                                },
-                                modifier = Modifier.padding(end = 8.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color.White,
-                                    contentColor = PredictSleepDisorderTheme.colors.primary
-                                ),
-                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                            ) {
-                                Text(
-                                    stringResource(R.string.proceed),
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.rounded_sleep_score_24),
-                                    modifier = Modifier.size(ButtonDefaults.IconSize),
-                                    contentDescription = stringResource(R.string.proceed)
-                                )
+                        AnimatedContent(
+                            targetState = step,
+                            label = "PredictStepAction",
+                            transitionSpec = {
+                                scaleIn(
+                                    animationSpec = spatialExpressiveSpring(),
+                                    initialScale = 0.8f
+                                ) + fadeIn(nonSpatialExpressiveSpring()) togetherWith
+                                        scaleOut(
+                                            animationSpec = spatialExpressiveSpring(),
+                                            targetScale = 0.8f
+                                        ) + fadeOut(nonSpatialExpressiveSpring())
                             }
-                        } else {
-                            Button(
-                                onClick = {
-                                    viewModel.reset()
-                                    back()
-                                },
-                            ) {
-                                Text(
-                                    stringResource(R.string.cancel_action),
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.rounded_cancel_24),
-                                    modifier = Modifier.size(ButtonDefaults.IconSize),
-                                    contentDescription = stringResource(R.string.cancel_action)
-                                )
-                            }
+                        ) { target ->
+                            if (target == 8) {
+                                Button(
+                                    onClick = {
+                                        onProceed()
+                                    },
+                                    modifier = Modifier
+                                        .padding(end = 8.dp)
+                                        .sharedBounds(
+                                            sharedContentState = rememberSharedContentState(
+                                                key = PredictResultBoundsKey
+                                            ),
+                                            boundsTransform = boundsTransform,
+                                            animatedVisibilityScope = animatedVisibilityScope,
+                                            exit = fadeOut(nonSpatialExpressiveSpring()),
+                                            enter = fadeIn(nonSpatialExpressiveSpring()),
+                                            clipInOverlayDuringTransition = OverlayClip(
+                                                RoundedCornerShape(
+                                                    roundedCornerAnim
+                                                )
+                                            ),
+                                        ),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = foregroundPrimary,
+                                        contentColor = backgroundPrimary
+                                    ),
+                                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                                ) {
+                                    Text(
+                                        stringResource(R.string.proceed),
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.rounded_sleep_score_24),
+                                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                                        contentDescription = stringResource(R.string.proceed)
+                                    )
+                                }
+                            } else {
+                                TextButton(
+                                    onClick = {
+                                        viewModel.reset()
+                                        back()
+                                    },
+                                ) {
+                                    Text(
+                                        stringResource(R.string.cancel_action),
+                                        color = foregroundPrimary,
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.rounded_cancel_24),
+                                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                                        tint = foregroundPrimary,
+                                        contentDescription = stringResource(R.string.cancel_action)
+                                    )
+                                }
 
+                            }
                         }
                     }
                 )
             },
-            containerColor = PredictSleepDisorderTheme.colors.primary,
+            containerColor = backgroundPrimary,
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(
@@ -189,7 +224,7 @@ fun PredictScreen(viewModel: AppViewModel, back: () -> Unit, toResult: () -> Uni
                 )
         ) { innerPadding ->
             CompositionLocalProvider(
-                LocalContentColor provides Color.White
+                LocalContentColor provides foregroundPrimary
             ) {
                 Box(
                     modifier = Modifier

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Surface
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.acml.predictsleepdisorder.ml.SleepDisorderModel
 import me.acml.predictsleepdisorder.ui.AppViewModel
@@ -21,7 +22,9 @@ class MainActivity : ComponentActivity() {
             val appViewModel: AppViewModel = viewModel(factory = factory)
 
             PredictSleepDisorderTheme {
-                PredictSleepDisorderApp(viewModel = appViewModel)
+                Surface {
+                    PredictSleepDisorderApp(viewModel = appViewModel)
+                }
             }
         }
     }

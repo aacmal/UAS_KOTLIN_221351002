@@ -18,5 +18,5 @@ val boundsTransform = BoundsTransform { _, _ ->
     spatialExpressiveSpring()
 }
 
-
 data object PredictBoundsKey
+data object PredictResultBoundsKey
