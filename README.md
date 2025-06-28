@@ -17,9 +17,9 @@ Aplikasi **Sleep Disorder Predictor** adalah aplikasi prediktif berbasis machine
 
 ## 📸 Cuplikan Aplikasi
 
-| Input Data                       | Proses Prediksi                  | Hasil Prediksi                   |
+| Menu Utama                       | Input Data                       | Hasil Prediksi                   |
 |----------------------------------|----------------------------------|----------------------------------|
-| ![Frame 1](./.media/frame_1.png) | ![Frame 2](./.media/frame_2.png) | ![Frame 3](./.media/frame_3.png) |
+| ![Frame 1](./.media/frame_1.png) | ![Frame 2](./.media/frame_2.png) | ![Frame 3](./.media/frame_3.jpg) |
 
 ## 🚀 Cara Kerja
 
