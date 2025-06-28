@@ -36,6 +36,7 @@ import me.acml.predictsleepdisorder.ui.screens.home.HomeScreen
 import me.acml.predictsleepdisorder.ui.screens.modeling.ModelingScreen
 import me.acml.predictsleepdisorder.ui.screens.predict.PredictResultScreen
 import me.acml.predictsleepdisorder.ui.screens.predict.PredictScreen
+import me.acml.predictsleepdisorder.ui.screens.welcome.WelcomeScreen
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -54,8 +55,39 @@ fun PredictSleepDisorderApp(viewModel: AppViewModel) {
         ) {
             NavHost(
                 navController = navController.navController,
-                startDestination = Destination.HOME,
+                startDestination = Destination.WELCOME,
             ) {
+                composableWithCompositionLocal(
+                    route = Destination.WELCOME,
+                    enterTransition = {
+                        slideIn(
+                            initialOffset = { fullSize ->
+                                IntOffset(
+                                    x = fullSize.width,
+                                    y = 0
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    },
+                    exitTransition = {
+                        slideOut(
+                            targetOffset = { fullSize ->
+                                IntOffset(
+                                    x = fullSize.width,
+                                    y = 0
+                                )
+                            },
+                            animationSpec = spatialExpressiveSpring()
+                        )
+                    }
+                ){
+                    WelcomeScreen(
+                        toHome = {
+                            navController.navigateToHome()
+                        }
+                    )
+                }
                 composableWithCompositionLocal(
                     route = Destination.HOME,
                     enterTransition = null, exitTransition = null

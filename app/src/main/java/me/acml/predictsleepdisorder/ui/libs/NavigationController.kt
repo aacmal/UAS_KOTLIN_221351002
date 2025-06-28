@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 object Destination {
+    const val WELCOME = "welcome"
     const val HOME = "home"
     const val PREDICT = "predict"
     const val DATASETS = "datasets"
