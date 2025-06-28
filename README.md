@@ -36,3 +36,5 @@ Aplikasi **Sleep Disorder Predictor** adalah aplikasi prediktif berbasis machine
 ## 📅 Dataset 
 Dataset yang digunakan untuk melatih model machine learning ini diambil dari [Sleep Health and Lifestyle Dataset](https://www.kaggle.com/datasets/uom190346a/sleep-health-and-lifestyle-dataset). Dataset ini mencakup berbagai fitur yang relevan dengan gangguan tidur, seperti usia, jenis kelamin, durasi tidur, dan faktor gaya hidup lainnya.
 
+## 🤖 Model ML
+Model machine learning yang digunakan dalam aplikasi ini terdapat di repository [Predict Sleep Disorder](https://github.com/aacmal/MODEL_UAS_221351002)
