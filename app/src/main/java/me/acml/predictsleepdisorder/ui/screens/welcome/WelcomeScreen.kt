@@ -43,7 +43,8 @@ fun WelcomeScreen(toHome: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
